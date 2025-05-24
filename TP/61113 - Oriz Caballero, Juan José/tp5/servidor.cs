@@ -72,3 +72,5 @@ class AppDb : DbContext {
     public AppDb(DbContextOptions<AppDb> opt) : base(opt) {}
     public DbSet<Producto> Productos => Set<Producto>();
 }
+
+//SI LLEGÓ A HACERSE EL PULL MAL ME JUBILO DE LA CARRERA Y VENDO PULSERAS EN LA PEATONAL

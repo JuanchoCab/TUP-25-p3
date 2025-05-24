@@ -10,7 +10,7 @@ var opcionesJson = new JsonSerializerOptions {
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     PropertyNameCaseInsensitive = true
 };
-
+//¿HICE EL PULL MAL?????????????
 while (true)
 {
     Console.WriteLine("---- MENÚ ----");
