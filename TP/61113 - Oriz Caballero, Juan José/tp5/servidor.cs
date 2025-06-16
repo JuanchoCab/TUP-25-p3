@@ -9,8 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http.Json;
 using System.Text.Json;
-
-
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddDbContext<AppDb>(options => options.UseSqlite("Data Source=./tienda.db"));
 builder.Services.Configure<JsonOptions>(options => {
@@ -19,6 +17,7 @@ builder.Services.Configure<JsonOptions>(options => {
 
 var app = builder.Build();
 
+// Rutas de la API
 app.MapGet("/productos", async (AppDb db) => await db.Productos.ToListAsync());
 
 app.MapGet("/productos/reposicion", async (AppDb db) => {
@@ -42,6 +41,7 @@ app.MapPost("/productos/{id}/quitar", async (int id, int cantidad, AppDb db) => 
     return Results.Ok();
 });
 
+// Crear base de datos y cargar datos si es la primera vez
 var db = app.Services.GetRequiredService<AppDb>();
 db.Database.EnsureCreated();
 if (!db.Productos.Any()) {
@@ -60,7 +60,7 @@ if (!db.Productos.Any()) {
 
 app.Run("http://localhost:5000");
 
-
+// Modelo
 class Producto {
     public int Id { get; set; }
     public string Nombre { get; set; } = "";
@@ -72,5 +72,3 @@ class AppDb : DbContext {
     public AppDb(DbContextOptions<AppDb> opt) : base(opt) {}
     public DbSet<Producto> Productos => Set<Producto>();
 }
-
-//SI LLEGÓ A HACERSE EL PULL MAL ME JUBILO DE LA CARRERA Y VENDO PULSERAS EN LA PEATONAL

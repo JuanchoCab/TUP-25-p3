@@ -1,0 +1,101 @@
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #FFFFFF;
+    color: #222222;
+}
+
+.loading-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.loader {
+    border-top-color: #666666;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    animation: spin 1s linear infinite;
+    -webkit-animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif; 
+    color: #222222;
+}
+
+.product-title {
+    font-family: 'Lora', serif; 
+}
+
+h1 {
+    font-family: 'Lora', serif !important; 
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+.bg-light-gray { background-color: var(--color-light-gray); }
+.bg-medium-gray { background-color: var(--color-medium-gray); }
+.bg-dark-gray { background-color: var(--color-dark-gray); }
+.bg-black-accent { background-color: var(--color-black-accent); }
+.bg-white-bg { background-color: var(--color-white); }
+
+.text-black-text { color: var(--color-black-text); }
+.text-dark-gray { color: var(--color-dark-gray); }
+.text-white-bg { color: var(--color-white); }
+
+.hover\:bg-dark-gray:hover { background-color: var(--color-dark-gray); }
+.focus\:ring-dark-gray:focus { --tw-ring-color: var(--color-dark-gray); }
+/* Base */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+.bg-medium-gray { background-color: #e0e0e0; }
+.bg-dark-gray { background-color: #616161; }
+.bg-light-gray { background-color: #f0f0f0; } 
+.bg-white-bg { background-color: #ffffff; }
+.text-black-text { color: #212121; }
+.text-dark-gray { color: #616161; }
+.text-white-bg { color: #ffffff; } 
+.bg-black-accent { background-color: #212121; } 
+
+.border-medium-gray { border-color: #bdbdbd; }
+.border-light-gray { border-color: #e0e0e0; }
+
+
+.carousel-container {
+    position: relative;
+}
+
+@-webkit-keyframes spinner {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+*:focus {
+    outline: none;
+}

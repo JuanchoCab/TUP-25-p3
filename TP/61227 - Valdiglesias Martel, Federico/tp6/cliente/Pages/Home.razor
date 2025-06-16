@@ -1,0 +1,55 @@
+﻿@page "/"
+@using cliente.modelos
+@using cliente.Services
+@using cliente.Layout
+@inject ApiService Api
+
+<PageTitle>Catálogo de Productos</PageTitle>
+
+@if (TerminoBusqueda != null)
+{
+    <div class="container mt-4">
+        <h3>Resultados para: "@TerminoBusqueda"</h3>
+        <hr />
+    </div>
+}
+
+<section class="my-5">
+    <div class="container">
+        @if (listaProductos == null)
+        {
+            <p><em>Cargando productos...</em></p>
+        }
+        else if (!listaProductos.Any())
+        {
+            <div class="text-center">
+                <h4>No se encontraron productos.</h4>
+                <p>Intenta con otro término de búsqueda.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4 row-cols-lg-5 row-cols-2 row-cols-md-3">
+                @foreach (var prod in listaProductos)
+                {
+                    <div class="col">
+                        <TarjetaProducto Producto="prod" />
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    private List<Producto>? listaProductos;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "q")]
+    public string? TerminoBusqueda { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        listaProductos = await Api.ObtenerProductosAsync(TerminoBusqueda);
+    }
+}

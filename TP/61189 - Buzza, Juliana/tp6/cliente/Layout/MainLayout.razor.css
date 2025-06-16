@@ -1,0 +1,50 @@
+.main-layout-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.content-container {
+    flex-grow: 1;
+}
+
+.bg-beige {
+    background-color: #F5EFE6;
+}
+
+.bg-brown {
+    background-color: #A38466; 
+}
+
+.text-brown {
+    color: #A38466;
+}
+
+.hover\:text-darkbrown:hover {
+    color: #7A5B42;
+}
+
+.bg-brown-dark {
+    background-color: #5C4133; 
+}
+
+.bg-accent {
+    background-color: #D36C2F; 
+}
+
+input[type="text"]::placeholder {
+  color: #B0A290; 
+  opacity: 0.8;
+}
+
+input[type="text"]:focus {
+  border-color: #D36C2F; 
+}

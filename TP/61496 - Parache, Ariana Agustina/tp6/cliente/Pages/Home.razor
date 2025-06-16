@@ -1,0 +1,31 @@
+﻿@page "/"
+@inject ApiService ApiService
+
+<h3>Lista de Productos</h3>
+
+@if (productos == null)
+{
+    <p>Cargando productos...</p>
+}
+else if (productos.Count == 0)
+{
+    <p>No hay productos disponibles.</p>
+}
+else
+{
+    <ul>
+        @foreach (var producto in productos)
+        {
+            <li>@producto.Nombre - $@producto.Precio</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Producto>? productos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        productos = await ApiService.ObtenerProductosAsync();
+    }
+}

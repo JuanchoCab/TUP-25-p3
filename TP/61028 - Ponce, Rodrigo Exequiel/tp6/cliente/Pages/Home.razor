@@ -1,0 +1,24 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager Nav
+
+<PageTitle>Inicio</PageTitle>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1>Comunicación Cliente-Servidor</h1>
+        </div>
+    </div>
+   
+</div> 
+
+<!-- Para que funcione el redireccionamiento, se debe tener una página de productos -->
+
+@code {
+    protected override void OnInitialized()
+    {
+        Nav.NavigateTo("/productos", true);
+    }
+}

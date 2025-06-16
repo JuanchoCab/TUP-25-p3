@@ -1,0 +1,74 @@
+﻿@page "/"
+@using cliente.Services
+@using cliente.Models
+
+@inject ApiService ApiService
+
+<PageTitle>Inicio</PageTitle>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="text-center">Lista de productos </h1>
+        </div>
+    </div>
+@if (datos.Count > 0)
+{
+    
+         <div class="d-flex flex-wrap gap-4 justify-content-start"> 
+            <Card Items="datos"/>
+
+        </div>
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Error al cargar los productos</h4>
+        <p>@error</p>
+    </div>
+
+}
+</div>
+
+
+@implements IDisposable 
+@code {
+    private List<Producto> datos;
+    private string? error;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        ApiService.OnChange += StateHasChanged;
+        ApiService.OnBuscar += OnBuscar;
+        await ObtenerDatosDelServidor(null);
+
+    }
+
+    public void Dispose()
+    {
+        ApiService.OnChange -= StateHasChanged;
+        ApiService.OnBuscar -= OnBuscar;
+    }
+
+    private async Task ObtenerDatosDelServidor(string? texto)
+    {
+        try
+        {
+            datos = await ApiService.ObtenerProductos();
+
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+
+    }
+
+    private async void OnBuscar(string texto)
+    {
+        await ObtenerDatosDelServidor(texto);
+        StateHasChanged();
+    }
+  
+   
+}

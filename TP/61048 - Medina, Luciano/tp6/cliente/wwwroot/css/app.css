@@ -1,0 +1,78 @@
+:root {
+    --color-oro: #c5a47e;
+    --color-oro-hover: #b3926c;
+    --color-fondo: #f9f9f9;
+    --color-texto: #333;
+    --color-cabecera: #ffffff;
+    --sombra-suave: 0 4px 15px rgba(0, 0, 0, 0.07);
+}
+
+html, body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+}
+
+/* ======== Estilos de Componentes ======== */
+
+/* Botones */
+.btn-primary {
+    background-color: var(--color-oro);
+    border-color: var(--color-oro);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--color-oro-hover);
+    border-color: var(--color-oro-hover);
+    box-shadow: 0 0 0 0.25rem rgba(197, 164, 126, 0.5);
+}
+
+/* Tarjetas de Producto */
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: var(--sombra-suave);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    color: var(--color-texto);
+}
+
+/* Cabecera */
+header.fixed-top {
+    box-shadow: var(--sombra-suave);
+    border-bottom: 1px solid #eee;
+}
+
+header .navbar-brand strong {
+    color: var(--color-oro);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Formularios */
+.form-control:focus {
+    border-color: var(--color-oro);
+    box-shadow: 0 0 0 0.25rem rgba(197, 164, 126, 0.5);
+}
+
+/* Icono del carrito */
+.nav-link .badge {
+    position: relative;
+    top: -10px;
+    left: -10px;
+}

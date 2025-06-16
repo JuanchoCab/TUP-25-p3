@@ -1,0 +1,136 @@
+/* Importa la fuente Inter de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+html, body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5; /* Un gris muy suave para el fondo del body */
+    color: #333; /* Color de texto general */
+    height: 100%; /* Asegura que el cuerpo ocupe toda la altura */
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600; /* Semi-bold para los títulos */
+    color: #212529; /* Un negro más oscuro para los títulos */
+}
+
+/* Estilos para el layout principal */
+.page {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    /* El estilo de .sidebar-wrapper está en navmenu.css */
+    /* Este div .sidebar actúa como un espacio reservado para el fixed sidebar-wrapper */
+    width: 250px; /* Ancho fijo para el área del sidebar */
+    flex-shrink: 0; /* Evita que el sidebar se encoja */
+}
+
+.main { /* Esta clase podría no estar en uso directo en MainLayout.razor, pero se mantiene por si acaso */
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin: 20px;
+}
+
+.main-content { /* Clase definida en MainLayout.razor para el contenido principal */
+    flex-grow: 1;
+    margin-left: 250px; /* Ajuste para el ancho del sidebar fijo */
+    background-color: #f0f2f5;
+    padding: 0;
+}
+
+.top-row {
+    background-color: #e9ecef; /* Fondo claro para la fila superior */
+    border-bottom: 1px solid #dee2e6;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-radius: 8px 8px 0 0;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff !important;
+}
+
+/* Estilos para las tarjetas de producto */
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.btn {
+    border-radius: 5px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* Spinner de carga */
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    margin-top: 50px;
+}
+
+/* Checkout */
+.checkout-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin: 20px auto;
+    max-width: 900px;
+}
+
+.checkout-form legend {
+    font-weight: 600;
+    color: #007bff;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.alert {
+    border-radius: 5px;
+}
+
+/* Sticky top para el resumen del pedido en checkout */
+.sticky-top {
+    position: sticky;
+    top: 20px;
+}
+
+/* Media queries para el main-content en app.css para asegurar el margen izquierdo en desktop */
+@media (max-width: 991.98px) {
+    .main-content {
+        margin-left: 0; /* En móvil, el main-content no tiene margen a la izquierda */
+    }
+}

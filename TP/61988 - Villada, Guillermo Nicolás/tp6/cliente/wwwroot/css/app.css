@@ -1,0 +1,146 @@
+/* URBAN & ENERGÉTICO */
+body {
+    background: linear-gradient(120deg, #fc02ec 0%, #89056a 100%);
+    color: #f3f3f3;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+
+/* Navbar */
+.urban-navbar {
+    background: linear-gradient(90deg, #191a1d 60%, #ff4e00 120%);
+    border-radius: 0 0 22px 22px;
+    border-bottom: 4px solid #1e3335;
+    min-height: 80px;
+    box-shadow: 0 2px 18px #0009;
+}
+
+.urban-brand {
+    color: #1e3335 !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 10px #ff4e0040, 0 0 6px #fff2;
+}
+
+.urban-logo-title {
+    font-family: 'Montserrat Black', Arial, sans-serif;
+    font-size: 2rem;
+    color: #b005c362;
+    letter-spacing: 2px;
+}
+.urban-nav .urban-nav-link {
+    color: #fafafa !important;
+    font-weight: 500;
+    margin: 0 15px;
+    font-size: 1.1rem;
+    transition: color .2s;
+    position: relative;
+}
+
+.urban-nav .urban-nav-link:hover,
+.urban-nav .urban-nav-link.active {
+    color: #ff4e00 !important;
+    text-shadow: 0 0 12px #ff4e0030;
+}
+
+.urban-search {
+    margin-left: auto;
+    margin-right: 20px;
+}
+.urban-search-input {
+    border-radius: 22px 0 0 22px;
+    border: none;
+    padding-right: 0;
+    min-width: 160px;
+    background: #23272b;
+    color: #fff;
+}
+.urban-btn-search {
+    border-radius: 0 22px 22px 0;
+    border: none;
+    background: #ff4e00;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 2px 6px #ff4e0030;
+    margin-left: -2px;
+    padding: 0 18px;
+    transition: background .2s;
+}
+.urban-btn-search:hover {
+    background: #ff9000;
+    color: #23272b;
+}
+
+/* Carrito botón */
+.urban-cart-btn {
+    background: linear-gradient(90deg,#00e1ff,#ff4e00);
+    color: #000;
+    border: none;
+    font-weight: 600;
+    border-radius: 22px;
+    padding: 8px 18px;
+    box-shadow: 0 2px 18px #00e1ff55;
+    position: relative;
+    transition: background .18s, color .18s;
+}
+.urban-cart-btn:hover {
+    background: linear-gradient(90deg,#ff4e00 60%,#00e1ff 120%);
+    color: #fff;
+    box-shadow: 0 4px 18px #ff4e0050;
+}
+.urban-badge {
+    background: #ff00a0;
+    color: #fff;
+    font-size: .97rem;
+    border-radius: 50%;
+    padding: 0.5em 0.7em;
+    margin-left: 8px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px #ff00a055;
+    vertical-align: middle;
+}
+
+/* Navbar toggler para mobile */
+.urban-toggler {
+    border: none;
+}
+.urban-toggler-icon {
+    background-image: linear-gradient(120deg,#ff4e00,#00e1ff);
+    border-radius: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    background: #3f136b;
+}
+::-webkit-scrollbar-thumb {
+    background: #ff4e00;
+    border-radius: 8px;
+}
+
+@media (max-width:991px){
+    .urban-nav .urban-nav-link { margin: 10px 0; }
+    .urban-search { margin: 8px 0 0 0; }
+    .urban-cart-btn { margin-top: 8px; }
+}
+.urban-menu-btn {
+    background: linear-gradient(90deg, #ff00a0 20%, #ff4e00 100%);
+    color: #fff !important;
+    border: none;
+    font-weight: 600;
+    border-radius: 22px;
+    padding: 8px 28px;
+    margin: 0 7px 7px 0;
+    font-size: 1rem;
+    box-shadow: 0 2px 14px #ff00a055;
+    transition: background .18s, color .18s, transform .08s;
+    outline: none;
+}
+.urban-menu-btn:hover, .urban-menu-btn:focus {
+    background: linear-gradient(90deg, #00e1ff 30%, #ff4e00 100%);
+    color: #23272b !important;
+    transform: scale(1.05);
+    box-shadow: 0 4px 18px #00e1ff55;
+    cursor: pointer;
+}

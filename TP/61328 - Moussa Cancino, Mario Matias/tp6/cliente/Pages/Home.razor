@@ -1,0 +1,78 @@
+﻿@page "/"
+@using cliente.Modelos
+@using cliente.Services
+@inject ApiService ApiService
+@inject CartService CartService
+
+<PageTitle>Catálogo de Productos</PageTitle>
+
+<h1>Nuestros Productos</h1>
+
+@if (error != null)
+{
+    <div class="alert alert-danger">Error al cargar productos: @error</div>
+}
+else if (productos == null)
+{
+    <p><em>Cargando productos...</em></p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var producto in productos)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <img src="@producto.ImagenUrl" class="card-img-top" alt="@producto.Nombre" style="height: 200px; object-fit: contain;">
+                    <div class="card-body">
+                        <h5 class="card-title">@producto.Nombre</h5>
+                        <p class="card-text">@producto.Descripcion</p>
+                        <p class="card-text"><strong>Precio:</strong> @producto.Precio.ToString("C")</p>
+                        <p class="card-text"><small class="text-muted">Stock disponible: @producto.Stock</small></p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary w-100" 
+                                disabled="@(producto.Stock == 0)" 
+                                @onclick="() => AddToCart(producto)">
+                            @(producto.Stock == 0 ? "Sin Stock" : "Agregar al carrito")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Producto> productos;
+    private string error;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string q { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProducts();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadProducts();
+    }
+
+    private async Task LoadProducts()
+    {
+        try {
+            productos = await ApiService.GetProductosAsync(q);
+        }
+        catch (Exception ex) {
+            error = ex.Message;
+        }
+    }
+
+    private async Task AddToCart(Producto producto)
+    {
+        await CartService.AddToCartAsync(producto);
+    }
+}

@@ -1,0 +1,65 @@
+﻿@page "/"
+@using cliente.Services
+@inject ApiService ApiService
+@inject NavigationManager Nav
+
+<PageTitle>Inicio</PageTitle>
+
+<div class="contenedor-home">
+    <h1 class="titulo-home">Bienvenido a la Tienda Online</h1>
+
+    <p class="descripcion-home">
+        Aquí podés explorar productos, agregarlos a tu carrito y confirmar la compra.
+    </p>
+
+    <div class="botones-home">
+        <button class="boton-home" @onclick="IrAlCatalogo">🛍️ Ir al Catálogo</button>
+        <button class="boton-home" @onclick="IrAlCarrito">🛒 Ir al Carrito</button>
+        <button class="boton-home secundario" @onclick="ObtenerDatosDelServidor">🔄 Ver estado del servidor</button>
+    </div>
+
+    @if (cargando)
+    {
+        <div class="mensaje-info">Cargando datos...</div>
+    }
+    else if (datos != null)
+    {
+        <div class="card-servidor">
+            <h4>📡 Estado del servidor</h4>
+            <p><strong>@datos.Mensaje</strong></p>
+            <p>Fecha: @datos.Fecha.ToString("dd/MM/yyyy HH:mm:ss")</p>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(error))
+    {
+        <div class="mensaje-error">❌ Error: @error</div>
+    }
+</div>
+
+@code {
+    private DatosRespuesta? datos;
+    private string? error;
+    private bool cargando = false;
+
+    private async Task ObtenerDatosDelServidor()
+    {
+        try
+        {
+            cargando = true;
+            error = null;
+            datos = await ApiService.ObtenerDatosAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+            datos = null;
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    void IrAlCatalogo() => Nav.NavigateTo("/catalogo");
+    void IrAlCarrito() => Nav.NavigateTo("/carrito");
+}
