@@ -1,0 +1,76 @@
+@page "/confirmacion"
+@inject CarritoService CarritoService
+@inject NavigationManager Nav
+
+<h1 class="text-2xl font-bold mb-4">Confirmar Compra</h1>
+
+@if (Carrito is null)
+{
+    <p>Cargando...</p>
+}
+else if (!Carrito.Items.Any())
+{
+    <p>No hay productos en el carrito.</p>
+}
+else
+{
+    <div class="mb-4">
+        <h2 class="font-semibold">Resumen de la compra:</h2>
+        <p>Total de ítems: @Carrito.Items.Sum(i => i.Cantidad)</p>
+        <p>Total a pagar: $@Carrito.Items.Sum(i => i.Cantidad * i.PrecioUnitario)</p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ErrorMensaje))
+    {
+        <div class="text-red-600 font-semibold mb-2">@ErrorMensaje</div>
+    }
+
+    <EditForm Model="Datos" OnValidSubmit="ConfirmarCompra">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-2">
+            <label class="block font-semibold">Nombre</label>
+            <InputText class="border p-1 rounded w-full" @bind-Value="Datos.Nombre" />
+            <ValidationMessage For="@(() => Datos.Nombre)" />
+        </div>
+
+        <div class="mb-2">
+            <label class="block font-semibold">Apellido</label>
+            <InputText class="border p-1 rounded w-full" @bind-Value="Datos.Apellido" />
+            <ValidationMessage For="@(() => Datos.Apellido)" />
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold">Email</label>
+            <InputText type="email" class="border p-1 rounded w-full" @bind-Value="Datos.Email" />
+            <ValidationMessage For="@(() => Datos.Email)" />
+        </div>
+
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Confirmar</button>
+    </EditForm>
+}
+
+@code {
+    private CarritoDto Carrito;
+    private ConfirmacionCompraDto Datos = new();
+    private string ErrorMensaje;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Carrito = await CarritoService.ObtenerCarrito();
+    }
+
+    private async Task ConfirmarCompra()
+    {
+        var exito = await CarritoService.ConfirmarCompra(Datos);
+        if (exito)
+        {
+            Nav.NavigateTo("/");
+        }
+        else
+        {
+            ErrorMensaje = "Error al confirmar la compra. Por favor, inténtelo de nuevo más tarde.";
+        }
+    }
+}

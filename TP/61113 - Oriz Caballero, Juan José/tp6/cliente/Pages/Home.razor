@@ -1,59 +1,76 @@
 ﻿@page "/"
-@using cliente.Services
+@using Cliente.Components
+@using Cliente.Modelo
 @inject ApiService ApiService
+@inject CarritoService CarritoService
 
-<PageTitle>Inicio</PageTitle>
+<h1 class="mb-4">Catálogo de productos</h1>
 
-<div class="container">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1>Comunicación Cliente-Servidor</h1>
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <input class="form-control" @bind="busqueda" @bind:event="oninput" placeholder="Buscar productos..." />
         </div>
-    </div>
-    
-    <div class="row mb-4">
-        <div class="col-12">
-            <button class="btn btn-primary" @onclick="ObtenerDatosDelServidor">Obtener datos del servidor</button>
+        <div class="col-md-4 text-end">
+            <span class="badge bg-secondary">Total en carrito: @CarritoService.TotalItems</span>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-12">            
-            @if (cargando) {
-                <div class="alert alert-info">Cargando datos...</div>
-            } else if (datos != null) {                <div class="card" style="width: 300px;">
-                    <div class="card-header">
-                        Respuesta del servidor
+        @if (productos == null)
+        {
+            <div class="col-12">
+                <div class="alert alert-info">Cargando productos...</div>
+            </div>
+        }
+        else if (!productos.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-warning">No se encontraron productos.</div>
+            </div>
+        }
+        else
+        {
+            @foreach (var producto in productos)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="@producto.ImagenUrl" class="card-img-top" alt="@producto.Nombre" style="height: 200px; object-fit: cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@producto.Nombre</h5>
+                            <p class="card-text">@producto.Descripcion</p>
+                            <p><strong>Precio:</strong> $@producto.Precio</p>
+                            <p><strong>Stock:</strong> @producto.Stock</p>
+                            <button class="btn btn-primary mt-2" @onclick="() => AgregarAlCarrito(producto.Id)" disabled="@(producto.Stock == 0)">
+                                Agregar al carrito
+                            </button>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">@datos.Mensaje</h5>
-                        <p class="card-text">Fecha: @datos.Fecha.ToString("dd/MM/yyyy HH:mm:ss")</p>
-                    </div>
-                </div>
-            } else if (error != null) {
-                <div class="alert alert-danger">
-                    Error: @error
                 </div>
             }
-        </div>
+        }
     </div>
 </div>
 
 @code {
-    private DatosRespuesta datos;
-    private string error;
-    private bool cargando = false;
+    private string busqueda = "";
+    private List<Producto> productos = new();
 
-    private async Task ObtenerDatosDelServidor() {
-        try {
-            cargando = true;
-            error = null;
-            datos = await ApiService.ObtenerDatosAsync();
-        } catch (Exception ex) {
-            error = ex.Message;
-            datos = null;
-        } finally {
-            cargando = false;
-        }
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarProductos();
     }
+
+    private async Task CargarProductos()
+    {
+        productos = await ApiService.ObtenerProductosAsync(busqueda);
+        StateHasChanged();
+    }
+
+   private async Task AgregarAlCarrito(int productoId)
+{
+    await CarritoService.AgregarProducto(productoId, 1); // siempre suma 1
+    await CargarProductos(); // actualiza stock visualmente
 }
+}
+

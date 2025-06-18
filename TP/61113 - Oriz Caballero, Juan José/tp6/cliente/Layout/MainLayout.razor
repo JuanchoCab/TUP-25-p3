@@ -1,4 +1,52 @@
-﻿@inherits LayoutComponentBase
-<div class="page">
+﻿@namespace Cliente.Layout
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+@inject CarritoService CarritoService
+
+<!-- Cabecera -->
+<div class="header bg-white shadow-md px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+    <!-- Logo -->
+    <div class="text-2xl font-bold cursor-pointer" @onclick="@(() => Navigation.NavigateTo("/"))">
+        <img src="logo.png" alt="Logo" class="h-10 inline-block" />
+    </div>
+
+    <!-- Buscador -->
+    <input @bind="searchTerm" 
+           @bind:event="oninput"
+           placeholder="Buscar productos..." 
+           class="border rounded px-4 py-2 w-1/3"
+           @onkeydown="HandleSearchKey" />
+
+    <!-- Carrito -->
+    <div class="relative cursor-pointer" @onclick="@(() => Navigation.NavigateTo("/carrito"))">
+        <span class="material-icons text-3xl">shopping_cart</span>
+        @if (CarritoService.TotalItems > 0)
+        {
+            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                @CarritoService.TotalItems
+            </span>
+        }
+    </div>
+</div>
+
+<!-- Contenido -->
+<div class="page p-4">
     @Body
 </div>
+
+@code {
+    private string searchTerm = "";
+
+    private void HandleSearchKey(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(searchTerm))
+        {
+            Navigation.NavigateTo($"/?search={Uri.EscapeDataString(searchTerm)}");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarritoService.CargarCarrito();
+    }
+}
