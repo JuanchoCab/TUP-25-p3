@@ -3,25 +3,25 @@
 @inject NavigationManager Navigation
 @inject CarritoService CarritoService
 
-<!-- Cabecera -->
-<div class="header bg-white shadow-md px-6 py-4 flex items-center justify-between sticky top-0 z-10">
-    <!-- Logo + Marca -->
-    <div class="flex items-center gap-3 cursor-pointer" @onclick="@(() => Navigation.NavigateTo("/"))">
-        <img src="icon-192.png" alt="Logo" class="h-14 w-14" />
-        <span class="text-lg font-semibold leading-snug">
-            Productos Regionales NOA <em>"Sabores Propios"</em>
-        </span>
-    </div>
-
-    <!-- Carrito -->
-    <div class="relative cursor-pointer" @onclick="@(() => Navigation.NavigateTo("/carrito"))">
-        <span class="material-icons text-4xl">shopping_cart</span>
-        @if (CarritoService.TotalItems > 0)
-        {
-            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                @CarritoService.TotalItems
+  <div class="header">
+    <div class="contenedor-header">
+        
+        <!-- Logo + Marca -->
+        <div class="marca" @onclick="@(() => Navigation.NavigateTo("/"))">
+            <img src="icon-192.png" alt="Logo" class="logo" />
+            <span class="titulo">
+                Productos Regionales NOA <em>"Sabores Propios"</em>
             </span>
-        }
+        </div>
+
+        <!-- Carrito -->
+        <div class="carrito" @onclick="@(() => Navigation.NavigateTo("/carrito"))">
+            <span class="material-icons">shopping_cart</span>
+            @if (CarritoService.TotalItems > 0)
+            {
+                <span class="carrito-cantidad">@CarritoService.TotalItems</span>
+            }
+        </div>
     </div>
 </div>
 
