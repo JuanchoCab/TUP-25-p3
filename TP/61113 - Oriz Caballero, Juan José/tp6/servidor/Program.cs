@@ -178,6 +178,7 @@ app.MapPut("/carritos/{carritoId}/{productoId}", async (int carritoId, int produ
 
     if (item == null)
     {
+        // Si el producto no está en el carrito, lo agregamos si hay stock suficiente
         if (producto.Stock < cantidad) return Results.BadRequest("Stock insuficiente.");
 
         carrito.Items.Add(new ItemCarrito
@@ -191,6 +192,7 @@ app.MapPut("/carritos/{carritoId}/{productoId}", async (int carritoId, int produ
     }
     else
     {
+        // ajusta cantidad
         int diferencia = cantidad - item.Cantidad;
         if (producto.Stock < diferencia) return Results.BadRequest("Stock insuficiente.");
 
@@ -199,7 +201,27 @@ app.MapPut("/carritos/{carritoId}/{productoId}", async (int carritoId, int produ
     }
 
     await db.SaveChangesAsync();
-    return Results.Ok(carrito);
+
+    // formato
+    var carritoDto = new
+    {
+        Id = carrito.Id,
+        Items = carrito.Items.Select(item => new {
+            ProductoId = item.ProductoId,
+            Cantidad = item.Cantidad,
+            PrecioUnitario = item.PrecioUnitario,
+            Producto = new {
+                Id = item.Producto.Id,
+                Nombre = item.Producto.Nombre,
+                Precio = item.Producto.Precio,
+                Stock = item.Producto.Stock,
+                ImagenUrl = item.Producto.ImagenUrl,
+                Descripcion = item.Producto.Descripcion
+            }
+        })
+    };
+
+    return Results.Ok(carritoDto);
 });
 
 // DELETE: Eliminar o reducir cantidad de producto en carrito

@@ -39,6 +39,7 @@ namespace Cliente.Services
 
             carrito = await response.Content.ReadFromJsonAsync<CarritoDto>() ?? new CarritoDto();
             TotalItems = carrito.Items.Sum(i => i.Cantidad);
+            Console.WriteLine($"✅ CarritoDto recibido: {System.Text.Json.JsonSerializer.Serialize(carrito)}");
             return carrito;
         }
 
@@ -46,12 +47,21 @@ namespace Cliente.Services
         {
             await AsegurarCarritoId();
 
+            Console.WriteLine($"📦 Intentando agregar producto {productoId} con cantidad {cantidad} al carrito {_carritoId}");
+
             var carritoActual = await ObtenerCarrito();
             var itemExistente = carritoActual.Items.FirstOrDefault(i => i.ProductoId == productoId);
             int cantidadFinal = (itemExistente?.Cantidad ?? 0) + cantidad;
 
+            Console.WriteLine($"📦 Cantidad final a enviar: {cantidadFinal}");
+
             var response = await _http.PutAsJsonAsync($"carritos/{_carritoId}/{productoId}", cantidadFinal);
-            response.EnsureSuccessStatusCode();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"❌ Error al agregar producto: {response.StatusCode}");
+                return;
+            }
 
             carrito = await response.Content.ReadFromJsonAsync<CarritoDto>() ?? new CarritoDto();
             TotalItems = carrito.Items.Sum(i => i.Cantidad);
@@ -116,33 +126,44 @@ namespace Cliente.Services
             carrito = await ObtenerCarrito();
         }
 
-        private async Task AsegurarCarritoId()
+       private async Task AsegurarCarritoId()
+{
+    if (_carritoId != 0)
+    {
+        Console.WriteLine($"🔁 Ya tengo un carrito con ID: {_carritoId}");
+
+        // Validar que el carrito aún existe en el servidor
+        var testResponse = await _http.GetAsync($"carritos/{_carritoId}");
+        if (testResponse.IsSuccessStatusCode)
         {
-            if (_carritoId != 0) return;
-
-            var guardado = await _localStorage.GetItemAsync<int>("carritoId");
-            if (guardado != 0)
-            {
-                _carritoId = guardado;
-                return;
-            }
-
-            var response = await _http.PostAsync("carritos", null);
-            if (!response.IsSuccessStatusCode)
-            {
-                Console.WriteLine($"❌ Error al crear carrito: {response.StatusCode}");
-                return;
-            }
-
-            var datos = await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
-            if (datos == null || !datos.ContainsKey("CarritoId"))
-            {
-                Console.WriteLine("❌ No se pudo obtener el ID del carrito.");
-                return;
-            }
-
-            _carritoId = datos["CarritoId"];
-            await _localStorage.SetItemAsync("carritoId", _carritoId);
+            return;
         }
+
+        Console.WriteLine($"⚠️ Carrito ID {_carritoId} no existe más en el servidor. Se creará uno nuevo.");
+        _carritoId = 0;
+        await _localStorage.RemoveItemAsync("carritoId");
+    }
+
+    Console.WriteLine("📦 Creando nuevo carrito en el servidor...");
+    var response = await _http.PostAsync("carritos", null);
+
+    if (!response.IsSuccessStatusCode)
+    {
+        Console.WriteLine($"❌ Error al crear carrito: {response.StatusCode}");
+        return;
+    }
+
+    var datos = await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
+    if (datos == null || !datos.ContainsKey("CarritoId"))
+    {
+        Console.WriteLine("❌ No se pudo obtener el ID del carrito.");
+        return;
+    }
+
+    _carritoId = datos["CarritoId"];
+    await _localStorage.SetItemAsync("carritoId", _carritoId);
+    Console.WriteLine($"✅ Carrito creado con ID: {_carritoId}");
+}
+
     }
 }
