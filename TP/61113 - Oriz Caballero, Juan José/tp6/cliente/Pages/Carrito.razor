@@ -51,8 +51,8 @@ else
     </div>
 
     <div class="flex gap-4">
-        <button @onclick="VaciarCarrito" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Vaciar Carrito</button>
-        <button @onclick='ConfirmarCompra' class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Confirmar Compra</button>
+        <button @onclick="VaciarCarrito" class="btn-principal">Vaciar Carrito</button>
+        <button @onclick='ConfirmarCompra' class="btn-principal">Confirmar Compra</button>
     </div>
 }
 
@@ -60,14 +60,14 @@ else
     private CarritoDto carrito;
     private bool cargado = false;
 
-    // Reemplazamos OnInitializedAsync por OnAfterRenderAsync
+  
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!cargado)
         {
             carrito = await CarritoService.ObtenerCarrito();
             cargado = true;
-            StateHasChanged(); // fuerza redibujo
+            StateHasChanged(); 
         }
     }
 

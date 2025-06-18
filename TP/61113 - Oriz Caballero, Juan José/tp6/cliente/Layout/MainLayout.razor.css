@@ -1,12 +1,108 @@
+:root {
+    --color-principal:  #1dd530 ;
+    --color-principal-hover: #1ea982;
+    --color-texto: white;
+    --color-alerta: #dc2626;
+}
+.contenido-principal {
+    background-color: var(--color-principal);
+    color:  #1dd59d ;
+    min-height: 100vh;
+}
+
+body {
+    margin: 0;
+    background-color: var(--color-principal);
+}
+
 .page {
     position: relative;
     display: flex;
     flex-direction: column;
+    background-color: var(--color-principal);
+    min-height: 100vh;
 }
 
 main {
     flex: 1;
 }
+
+.btn-principal {
+    background-color: var(--color-principal);
+    color: var(--color-texto);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-principal:hover {
+    background-color: var(--color-principal-hover);
+}
+
+.titulo-principal {
+    color: var(--color-principal);
+}
+
+.header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.contenedor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.logo {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+}
+
+.titulo {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+
+.carrito {
+    position: relative;
+    cursor: pointer;
+}
+
+.carrito .material-icons {
+    font-size: 2.5rem;
+}
+
+.carrito-cantidad {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: var(--color-alerta);
+    color: white;
+    font-size: 0.75rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+}
+
 
 .sidebar {
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
@@ -15,33 +111,37 @@ main {
 .top-row {
     background-color: #f7f7f7;
     border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    height: 3.5rem;
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+.top-row ::deep a,
+.top-row ::deep .btn-link {
+    margin-left: 1.5rem;
+    white-space: nowrap;
+    text-decoration: none;
+}
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
+.top-row ::deep a:hover,
+.top-row ::deep .btn-link:hover {
+    text-decoration: underline;
+}
 
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.top-row ::deep a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 
 @media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;
     }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
+    .top-row ::deep a,
+    .top-row ::deep .btn-link {
         margin-left: 0;
     }
 }
@@ -70,69 +170,9 @@ main {
         width: 0;
     }
 
-    .top-row, article {
+    .top-row,
+    article {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
 }
-.header {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1rem 1.5rem;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-/* Contenedor interno del header */
-.contenedor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Logo + Marca */
-.marca {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    cursor: pointer;
-}
-
-.logo {
-    height: 50px;
-    width: 50px;
-    object-fit: contain;
-}
-
-.titulo {
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-/* Carrito */
-.carrito {
-    position: relative;
-    cursor: pointer;
-}
-
-.carrito .material-icons {
-    font-size: 2.5rem; /* ícono más grande */
-}
-
-/* Indicador cantidad */
-.carrito-cantidad {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background-color: #dc2626;
-    color: white;
-    font-size: 0.75rem;
-    width: 1.25rem;
-    height: 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px;
-}
-
