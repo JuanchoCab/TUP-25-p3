@@ -1,10 +1,27 @@
 @page "/confirmacion"
 @inject CarritoService CarritoService
-@inject NavigationManager Nav
 
 <h1 class="text-2xl font-bold mb-4">Confirmar Compra</h1>
 
-@if (Carrito is null)
+@if (CompraExitosa)
+{
+    <div class="p-4 bg-green-100 text-green-800 font-semibold border border-green-300 rounded mb-4">
+        Compra confirmada. ¡Gracias por apoyar a productores locales!
+    </div>
+
+    <div class="border p-4 rounded shadow-md bg-white">
+        <h2 class="text-xl font-semibold mb-2">Recibo de la compra</h2>
+        <p><strong>Nombre:</strong> @Datos.Nombre</p>
+        <p><strong>Apellido:</strong> @Datos.Apellido</p>
+        <p><strong>Email:</strong> @Datos.Email</p>
+        <p><strong>Total pagado:</strong> $@TotalPagado</p>
+
+        <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" @onclick="VolverInicio">
+            Volver al inicio
+        </button>
+    </div>
+}
+else if (Carrito is null)
 {
     <p>Cargando...</p>
 }
@@ -55,6 +72,8 @@ else
     private CarritoDto Carrito;
     private ConfirmacionCompraDto Datos = new();
     private string ErrorMensaje;
+    private bool CompraExitosa = false;
+    private decimal TotalPagado = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,11 +85,21 @@ else
         var exito = await CarritoService.ConfirmarCompra(Datos);
         if (exito)
         {
-            Nav.NavigateTo("/");
+            CompraExitosa = true;
+            TotalPagado = Carrito.Items.Sum(i => i.Cantidad * i.PrecioUnitario);
+            Carrito = new CarritoDto(); // Limpiamos visualmente el carrito
         }
         else
         {
             ErrorMensaje = "Error al confirmar la compra. Por favor, inténtelo de nuevo más tarde.";
         }
     }
+
+    private void VolverInicio()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
 }

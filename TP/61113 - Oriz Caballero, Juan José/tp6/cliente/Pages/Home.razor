@@ -4,15 +4,22 @@
 @inject ApiService ApiService
 @inject CarritoService CarritoService
 
-<h1 class="mb-4">Catálogo de productos</h1>
-
 <div class="container mt-4">
-    <div class="row mb-3">
+    <div class="row align-items-center mb-3">
         <div class="col-md-8">
-            <input class="form-control" @bind="busqueda" @bind:event="oninput" placeholder="Buscar productos..." />
+            <h2>Catálogo de productos</h2>
         </div>
         <div class="col-md-4 text-end">
-            <span class="badge bg-secondary">Total en carrito: @CarritoService.TotalItems</span>
+            <span class="badge bg-secondary fs-6">🛒 Total en carrito: @CarritoService.TotalItems</span>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <input class="form-control"
+                   value="@busqueda"
+                   @oninput="OnBusquedaChanged"
+                   placeholder="Buscar productos..." />
         </div>
     </div>
 
@@ -34,14 +41,18 @@
             @foreach (var producto in productos)
             {
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 shadow-sm">
                         <img src="@producto.ImagenUrl" class="card-img-top" alt="@producto.Nombre" style="height: 200px; object-fit: cover;" />
-                        <div class="card-body">
-                            <h5 class="card-title">@producto.Nombre</h5>
-                            <p class="card-text">@producto.Descripcion</p>
-                            <p><strong>Precio:</strong> $@producto.Precio</p>
-                            <p><strong>Stock:</strong> @producto.Stock</p>
-                            <button class="btn btn-primary mt-2" @onclick="() => AgregarAlCarrito(producto.Id)" disabled="@(producto.Stock == 0)">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <h5 class="card-title">@producto.Nombre</h5>
+                                <p class="card-text">@producto.Descripcion</p>
+                                <p><strong>Precio:</strong> $@producto.Precio</p>
+                                <p><strong>Stock:</strong> @producto.Stock</p>
+                            </div>
+                            <button class="btn btn-primary mt-2"
+                                    @onclick="() => AgregarAlCarrito(producto.Id)"
+                                    disabled="@(producto.Stock == 0)">
                                 Agregar al carrito
                             </button>
                         </div>
@@ -64,13 +75,17 @@
     private async Task CargarProductos()
     {
         productos = await ApiService.ObtenerProductosAsync(busqueda);
-        StateHasChanged();
     }
 
-   private async Task AgregarAlCarrito(int productoId)
-{
-    await CarritoService.AgregarProducto(productoId, 1); // siempre suma 1
-    await CargarProductos(); // actualiza stock visualmente
-}
-}
+    private async Task OnBusquedaChanged(ChangeEventArgs e)
+    {
+        busqueda = e.Value?.ToString() ?? "";
+        await CargarProductos();
+    }
 
+    private async Task AgregarAlCarrito(int productoId)
+    {
+        await CarritoService.AgregarProducto(productoId, 1);
+        await CargarProductos();
+    }
+}

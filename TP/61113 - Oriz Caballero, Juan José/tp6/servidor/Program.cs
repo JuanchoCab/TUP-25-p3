@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Servidor.Modelo;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,20 +63,34 @@ app.MapPost("/carritos", async (AppDbContext db) =>
     db.Carritos.Add(carrito);
     await db.SaveChangesAsync();
 
-    return Results.Ok(new { CarritoId = carrito.Id });
+    return Results.Json(new Dictionary<string, int> { { "CarritoId", carrito.Id } });
 });
 
-//ESTO ES GET Y LA BUSQUEDA
+//ESTO ES GET Y LA BUSQUEDA (mejorada para ignorar tildes y ñ)
 app.MapGet("/productos", async (AppDbContext db, string? search) =>
 {
-    var productos = db.Productos.AsQueryable();
+    var productos = await db.Productos.ToListAsync();
 
-    if (!string.IsNullOrEmpty(search))
+    if (!string.IsNullOrWhiteSpace(search))
     {
-        productos = productos.Where(p => p.Nombre.Contains(search) || p.Descripcion.Contains(search));
+        // normaliza texto a minúscula y sin acentos/tildes
+        string Normalizar(string texto)
+        {
+            return string.Concat(
+                texto.Normalize(NormalizationForm.FormD)
+                     .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+            ).ToLower();
+        }
+
+        var textoBusqueda = Normalizar(search);
+
+        productos = productos.Where(p =>
+            Normalizar(p.Nombre).Contains(textoBusqueda) ||
+            Normalizar(p.Descripcion).Contains(textoBusqueda)
+        ).ToList();
     }
 
-    return Results.Ok(await productos.ToListAsync());
+    return Results.Ok(productos);
 });
 
 //ESTO ES GET CON CONEXION AL CARRITO

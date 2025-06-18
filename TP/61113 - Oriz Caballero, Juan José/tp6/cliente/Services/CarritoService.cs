@@ -126,44 +126,47 @@ namespace Cliente.Services
             carrito = await ObtenerCarrito();
         }
 
-       private async Task AsegurarCarritoId()
-{
-    if (_carritoId != 0)
-    {
-        Console.WriteLine($"🔁 Ya tengo un carrito con ID: {_carritoId}");
-
-        // Validar que el carrito aún existe en el servidor
-        var testResponse = await _http.GetAsync($"carritos/{_carritoId}");
-        if (testResponse.IsSuccessStatusCode)
+        private async Task AsegurarCarritoId()
         {
-            return;
+            if (_carritoId != 0)
+            {
+                Console.WriteLine($"🔁 Ya tengo un carrito con ID: {_carritoId}");
+
+                var testResponse = await _http.GetAsync($"carritos/{_carritoId}");
+                if (testResponse.IsSuccessStatusCode) return;
+
+                Console.WriteLine($"⚠️ Carrito ID {_carritoId} no existe más en el servidor. Se creará uno nuevo.");
+                _carritoId = 0;
+                await _localStorage.RemoveItemAsync("carritoId");
+            }
+
+            Console.WriteLine("📦 Creando nuevo carrito en el servidor...");
+            var response = await _http.PostAsync("carritos", null);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"❌ Error al crear carrito: {response.StatusCode}");
+                return;
+            }
+
+            try
+            {
+                var datos = await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
+                if (datos != null && datos.TryGetValue("CarritoId", out int id))
+                {
+                    _carritoId = id;
+                    await _localStorage.SetItemAsync("carritoId", _carritoId);
+                    Console.WriteLine($"✅ Carrito creado con ID: {_carritoId}");
+                }
+                else
+                {
+                    Console.WriteLine("❌ No se pudo deserializar correctamente la respuesta del carrito.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Excepción al obtener carrito: {ex.Message}");
+            }
         }
-
-        Console.WriteLine($"⚠️ Carrito ID {_carritoId} no existe más en el servidor. Se creará uno nuevo.");
-        _carritoId = 0;
-        await _localStorage.RemoveItemAsync("carritoId");
-    }
-
-    Console.WriteLine("📦 Creando nuevo carrito en el servidor...");
-    var response = await _http.PostAsync("carritos", null);
-
-    if (!response.IsSuccessStatusCode)
-    {
-        Console.WriteLine($"❌ Error al crear carrito: {response.StatusCode}");
-        return;
-    }
-
-    var datos = await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
-    if (datos == null || !datos.ContainsKey("CarritoId"))
-    {
-        Console.WriteLine("❌ No se pudo obtener el ID del carrito.");
-        return;
-    }
-
-    _carritoId = datos["CarritoId"];
-    await _localStorage.SetItemAsync("carritoId", _carritoId);
-    Console.WriteLine($"✅ Carrito creado con ID: {_carritoId}");
-}
-
     }
 }
