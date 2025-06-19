@@ -5,7 +5,6 @@
 
 <div class="header">
     <div class="contenedor-header">
-        
         <!-- Logo + Marca -->
         <div class="marca" @onclick="@(() => Navigation.NavigateTo("/"))">
             <img src="icon-192.png" alt="Logo" class="logo" />
@@ -25,10 +24,10 @@
     </div>
 </div>
 
-
-<!-- Contenido -->
-<div class="contenido-principal p-4">
-    @Body
+<div class="contenido-principal" style="background-color: #6ba770;">
+    <main class="p-4">
+        @Body
+    </main>
 </div>
 
 @code {
