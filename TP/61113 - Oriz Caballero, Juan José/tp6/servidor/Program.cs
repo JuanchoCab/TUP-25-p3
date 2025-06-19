@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Text;
 
+
+//funciona en las dos pc en teoría
+  
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Agregar servicios CORS para permitir solicitudes desde el cliente
