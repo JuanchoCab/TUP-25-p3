@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Text;
 
 
-//funciona en las dos pc en teoría
+//funciona en las dos pc en teoría(teoria(creo))
   
 
 var builder = WebApplication.CreateBuilder(args);
